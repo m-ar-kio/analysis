@@ -1,13 +1,13 @@
-import * as React from "react"
-import { Modal, ModalHeader, ModalBody, ModalFooter } from "baseui/modal"
-import { Input } from "baseui/input"
-import { Button } from "baseui/button"
-import { TOAST_DURATION } from "../../utils/constants"
-import { toaster } from "baseui/toast"
+import * as React from 'react'
+import { Modal, ModalHeader, ModalBody, ModalFooter } from 'baseui/modal'
+import { Input } from 'baseui/input'
+import { Button } from 'baseui/button'
+import { TOAST_DURATION } from '../../utils/constants'
+import { toaster } from 'baseui/toast'
 
 export default function CoffeeModal({ mark, onClose }) {
   const [isOpen, setIsOpen] = React.useState(!!mark)
-  const [value, setValue] = React.useState("")
+  const [value, setValue] = React.useState('')
   return (
     <Modal
       size="auto"
@@ -20,7 +20,7 @@ export default function CoffeeModal({ mark, onClose }) {
       overrides={{
         Dialog: {
           style: ({ $theme }) => ({
-            height: "auto",
+            height: 'auto',
           }),
         },
       }}
@@ -30,7 +30,7 @@ export default function CoffeeModal({ mark, onClose }) {
         <p>{mark.owner}</p>
         <Input
           value={value}
-          onChange={e => setValue(e.target.value)}
+          onChange={(e) => setValue((e.target as any).value)}
           placeholder="Number of AR"
           clearOnEscape
           type="number"
@@ -41,19 +41,19 @@ export default function CoffeeModal({ mark, onClose }) {
         <Button
           onClick={() => {
             if (!value) {
-              toaster.negative("Invalid number", {
+              toaster.negative('Invalid number', {
                 autoHideDuration: TOAST_DURATION,
               })
               return
             }
-            import("arweave/web")
-              .then(async Arweave => {
+            import('arweave/web')
+              .then(async (Arweave) => {
                 const arweave = Arweave.default.init({
-                  host: "arweave.net",
+                  host: 'arweave.net',
                   port: 443,
-                  protocol: "https",
+                  protocol: 'https',
                 })
-                const keyfile = sessionStorage.getItem("keyfile")
+                const keyfile = sessionStorage.getItem('keyfile')
                 if (keyfile) {
                   const wallet = JSON.parse(keyfile)
                   const coffeeTx = await arweave.createTransaction(
@@ -65,7 +65,7 @@ export default function CoffeeModal({ mark, onClose }) {
                   )
                   await arweave.transactions.sign(coffeeTx, wallet)
                   await arweave.transactions.post(coffeeTx)
-                  toaster.positive("Transaction sent, thank you", {
+                  toaster.positive('Transaction sent, thank you', {
                     autoHideDuration: TOAST_DURATION,
                   })
                   setIsOpen(false)
@@ -76,13 +76,13 @@ export default function CoffeeModal({ mark, onClose }) {
                   })
                   await window.arweaveWallet.sign(coffeeTx)
                   await arweave.transactions.post(coffeeTx)
-                  toaster.positive("Transaction sent, thank you", {
+                  toaster.positive('Transaction sent, thank you', {
                     autoHideDuration: TOAST_DURATION,
                   })
                   setIsOpen(false)
                 }
               })
-              .catch(error => {
+              .catch((error) => {
                 toaster.negative(error.message, {
                   autoHideDuration: TOAST_DURATION,
                 })

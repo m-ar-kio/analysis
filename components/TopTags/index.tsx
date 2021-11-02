@@ -4,8 +4,13 @@ import { fetchTopTags } from '../../hooks'
 
 export default function TopTags() {
   const [topTags, setTopTags] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
   useEffect(() => {
-    fetchTopTags().then((res) => setTopTags(res))
+    setIsLoading(true)
+    fetchTopTags().then((res) => {
+      setTopTags(res)
+      setIsLoading(false)
+    })
   }, [])
 
   return (
@@ -20,6 +25,32 @@ export default function TopTags() {
       }}
     >
       <H3 margin="0px">Top Tags</H3>
+      {isLoading && (
+        <div>
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((tag, idx) => (
+            <p
+              key={tag}
+              style={{
+                display: 'flex',
+                flexFlow: 'row nowrap',
+                alignItems: 'center',
+                margin: '8px 0',
+              }}
+            >
+              <span>{idx + 1}</span>
+              <span
+                style={{
+                  display: 'inline-block',
+                  background: '#e3e3e3',
+                  width: 50 + Math.floor(Math.random() * 100),
+                  height: 27,
+                  marginLeft: 8,
+                }}
+              ></span>
+            </p>
+          ))}
+        </div>
+      )}
       {topTags.map((tag, idx) => (
         <p key={tag}>
           <span>{idx + 1}</span>

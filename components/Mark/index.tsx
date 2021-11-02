@@ -1,13 +1,13 @@
-import * as React from "react"
-import urlParse from "url-parse"
-import SimpleMarkdown from "simple-markdown"
-import { initTwitterRules } from "./rules/twitter"
-import { isMirror, isTwitter } from "./helper"
-import Tweet from "./Tweet"
-import Article from "./Article"
-import { Block } from "baseui/block"
-import { Button } from "baseui/button"
-import { Coffee } from "react-feather"
+import * as React from 'react'
+import urlParse from 'url-parse'
+import SimpleMarkdown from 'simple-markdown'
+import { initTwitterRules } from './rules/twitter'
+import { isMirror, isTwitter } from './helper'
+import Tweet from './Tweet'
+import Article from './Article'
+import { Block } from 'baseui/block'
+// import { Button } from 'baseui/button'
+// import { Coffee } from 'react-feather'
 
 interface Props {
   mark: any
@@ -22,10 +22,10 @@ export default function Mark({ mark, isInModal, setCoffeeMark }: Props) {
   }
   const rawBuiltParser = SimpleMarkdown.parserFor(rules)
   const parse = function (source) {
-    const blockSource = source + "\n\n"
+    const blockSource = source + '\n\n'
     return rawBuiltParser(blockSource, { inline: false })
   }
-  const reactOutput = SimpleMarkdown.outputFor(rules, "react")
+  const reactOutput = SimpleMarkdown.outputFor(rules, 'react')
 
   const tree = parse(mark.content)
   const parsedURL = urlParse(mark.origin, true)
@@ -58,23 +58,23 @@ export default function Mark({ mark, isInModal, setCoffeeMark }: Props) {
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator?.userAgent)
   return (
     <Block
-      width={isMobile ? "calc(100% - 30px)" : "800px"}
-      margin={isMobile ? "0px 10px" : "0px"}
+      width={isMobile ? 'calc(100% - 30px)' : '800px'}
+      margin={isMobile ? '0px 10px' : '0px'}
       overrides={{
         Block: {
           style: {
-            padding: "20px",
-            border: "#222326 1px solid",
-            margin: "10px",
-            boxShadow: "8px 8px 0px 0px #222326",
-            cursor: "pointer",
-            position: "relative",
+            padding: '20px',
+            border: '#222326 1px solid',
+            margin: '10px',
+            boxShadow: '8px 8px 0px 0px #222326',
+            cursor: 'pointer',
+            position: 'relative',
           },
         },
       }}
     >
       {content}
-      {!!setCoffeeMark && (
+      {/* {!!setCoffeeMark && (
         <Button
           kind="secondary"
           overrides={{
@@ -92,7 +92,7 @@ export default function Mark({ mark, isInModal, setCoffeeMark }: Props) {
         >
           <Coffee />
         </Button>
-      )}
+      )} */}
     </Block>
   )
 }

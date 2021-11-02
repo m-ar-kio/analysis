@@ -17,11 +17,11 @@ export default function TopTags() {
     <div
       style={{
         border: '#222326 1px solid',
-        margin: '10px',
+        marginLeft: 50,
         boxShadow: '8px 8px 0px 0px #222326',
         padding: '20px 30px',
         position: 'relative',
-        top: 96,
+        top: 30,
       }}
     >
       <H3 margin="0px">Top Tags</H3>

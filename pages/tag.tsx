@@ -1,21 +1,18 @@
-import React, { useEffect, useState } from "react"
-import { Block } from "baseui/block"
-import Layout from "../components/Layout"
-import Mark from "../components/Mark"
-import { fetchTxByTag } from "../hooks"
-import { H1 } from "baseui/typography"
-import { formatMark } from "../utils/format"
-import { Button } from "baseui/button"
-import CoffeeModal from "../components/Mark/CoffeeModal"
-import PacmanLoader from "react-spinners/PacmanLoader"
+import React, { useEffect, useState } from 'react'
+import { Block } from 'baseui/block'
+import Layout from '../components/Layout'
+import Mark from '../components/Mark'
+import { fetchTxByTag } from '../hooks'
+import { H1 } from 'baseui/typography'
+import { formatMark } from '../utils/format'
+import { Button } from 'baseui/button'
+import PacmanLoader from 'react-spinners/PacmanLoader'
 
 function TagPage() {
   const [page, setPage] = React.useState(1)
   const [marks, setMarks] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState(true)
-  const [tag, setTag] = useState("")
-
-  const [coffeeMark, setCoffeeMark] = React.useState(null)
+  const [tag, setTag] = useState('')
 
   useEffect(() => {
     const urlSearchParams = new URLSearchParams(window.location.search)
@@ -23,7 +20,7 @@ function TagPage() {
     if (params.value) {
       setIsLoading(true)
       setTag(params.value)
-      fetchTxByTag(page, params.value).then(_marks => {
+      fetchTxByTag(page, params.value).then((_marks) => {
         setIsLoading(false)
         setMarks(_marks)
       })
@@ -42,10 +39,10 @@ function TagPage() {
           Marks with
           <span
             style={{
-              background: "#222326",
-              color: "white",
-              padding: "0 10px",
-              margin: "0 10px",
+              background: '#222326',
+              color: 'white',
+              padding: '0 10px',
+              margin: '0 10px',
             }}
           >{`#${tag}`}</span>
           tag
@@ -55,20 +52,11 @@ function TagPage() {
             <PacmanLoader color="#000" loading={isLoading} size={50} />
           </div>
         )}
-        {marks.map(m => {
-          return (
-            <Mark
-              key={m.id}
-              mark={formatMark(m)}
-              setCoffeeMark={setCoffeeMark}
-            />
-          )
+        {marks.map((m) => {
+          return <Mark key={m.id} mark={formatMark(m)} isPublic />
         })}
         {!!marks.length && (
           <Button onClick={() => setPage(page + 1)}>LOAD MORE</Button>
-        )}
-        {!!coffeeMark && (
-          <CoffeeModal mark={coffeeMark} onClose={() => setCoffeeMark(null)} />
         )}
       </Block>
     </Layout>

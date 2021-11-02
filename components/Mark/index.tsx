@@ -6,16 +6,16 @@ import { isMirror, isTwitter } from './helper'
 import Tweet from './Tweet'
 import Article from './Article'
 import { Block } from 'baseui/block'
-// import { Button } from 'baseui/button'
-// import { Coffee } from 'react-feather'
+import { ThumbsUp } from 'react-feather'
+import { Button } from 'baseui/button'
 
 interface Props {
   mark: any
   isInModal?: boolean
-  setCoffeeMark?: (mark) => void
+  isPublic?: boolean
 }
 
-export default function Mark({ mark, isInModal, setCoffeeMark }: Props) {
+export default function Mark({ mark, isInModal, isPublic }: Props) {
   const rules = {
     ...SimpleMarkdown.defaultRules,
     ...initTwitterRules(mark),
@@ -74,23 +74,21 @@ export default function Mark({ mark, isInModal, setCoffeeMark }: Props) {
       }}
     >
       {content}
-      {/* {!!setCoffeeMark && (
+      {/* {isPublic && (
         <Button
           kind="secondary"
           overrides={{
             BaseButton: {
               style: {
-                position: "absolute",
+                position: 'absolute',
                 right: 0,
                 top: 0,
               },
             },
           }}
-          onClick={() => {
-            setCoffeeMark(mark)
-          }}
+          onClick={() => {}}
         >
-          <Coffee />
+          <ThumbsUp />
         </Button>
       )} */}
     </Block>

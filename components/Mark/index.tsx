@@ -103,7 +103,7 @@ export default function Mark({ mark, isInModal, isPublic }: Props) {
           onClick={() => likeMark(mark.txId)}
         >
           <ThumbsUp />
-          <span>{likes.length}</span>
+          <span style={{ marginLeft: 4, fontSize: 20 }}>{likes.length}</span>
         </Button>
       )}
     </Block>

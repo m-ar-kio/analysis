@@ -1,8 +1,8 @@
-import React from "react"
-import { Block } from "baseui/block"
-import { ellipsis } from "../../utils/format"
-import dayjs from "dayjs"
-import Source from "./Source"
+import React from 'react'
+import { Block } from 'baseui/block'
+import { ellipsis } from '../../utils/format'
+import dayjs from 'dayjs'
+import Source from './Source'
 
 export default function Footer({ mark, parsedURL }) {
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator?.userAgent)
@@ -10,16 +10,16 @@ export default function Footer({ mark, parsedURL }) {
   return (
     <Block
       display="flex"
-      alignItems={isMobile ? "flex-start" : "center"}
+      alignItems={isMobile ? 'flex-start' : 'center'}
       justifyContent="space-between"
-      flexDirection={isMobile ? "column" : "row"}
+      flexDirection={isMobile ? 'column' : 'row'}
       className="footer"
       overrides={{
         Block: {
           style: {
-            paddingTop: "5px",
-            borderTop: "#222326 1px solid",
-            marginTop: "5px",
+            paddingTop: '5px',
+            borderTop: '#222326 1px solid',
+            marginTop: '5px',
           },
         },
       }}
@@ -31,6 +31,9 @@ export default function Footer({ mark, parsedURL }) {
           href={`https://viewblock.io/arweave/tx/${mark.txId}`}
           target="_blank"
           rel="noreferrer"
+          onClick={(e) => {
+            e.stopPropagation()
+          }}
         >
           {ellipsis(mark.txId, 5, 0)}
         </a>
@@ -38,14 +41,15 @@ export default function Footer({ mark, parsedURL }) {
       <span>
         <span style={{ marginRight: 4 }}>Marker:</span>
         <a
-          href={`https://viewblock.io/arweave/address/${mark.owner}`}
-          target="_blank"
-          rel="noreferrer"
+          href={`/marker?value=${mark.owner}`}
+          onClick={(e) => {
+            e.stopPropagation()
+          }}
         >
           {ellipsis(mark.owner, 5, 6)}
         </a>
       </span>
-      <span>{dayjs(mark.timestamp * 1000).format("YYYY/MM/DD HH:MM")}</span>
+      <span>{dayjs(mark.timestamp * 1000).format('YYYY/MM/DD HH:MM')}</span>
     </Block>
   )
 }

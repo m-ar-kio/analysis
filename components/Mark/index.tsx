@@ -8,6 +8,8 @@ import Article from './Article'
 import { Block } from 'baseui/block'
 import { ThumbsUp } from 'react-feather'
 import { Button } from 'baseui/button'
+import { likeMark } from '../../utils/wallet'
+import { fetchLikeByTxId } from '../../hooks'
 
 interface Props {
   mark: any
@@ -33,6 +35,18 @@ export default function Mark({ mark, isInModal, isPublic }: Props) {
   const _isTwitter = isTwitter(parsedURL.hostname)
   const _isMirror = isMirror(parsedURL.hostname)
   let content = null
+  const [likes, setLikes] = React.useState([])
+
+  React.useEffect(() => {
+    if (mark) {
+      fetchLikeByTxId(mark.txId)
+        .then((_liked) => {
+          setLikes(_liked)
+        })
+        .catch(() => {})
+    }
+  }, [mark])
+
   if (_isTwitter || _isMirror) {
     content = (
       <Tweet
@@ -74,7 +88,7 @@ export default function Mark({ mark, isInModal, isPublic }: Props) {
       }}
     >
       {content}
-      {/* {isPublic && (
+      {isPublic && (
         <Button
           kind="secondary"
           overrides={{
@@ -86,11 +100,12 @@ export default function Mark({ mark, isInModal, isPublic }: Props) {
               },
             },
           }}
-          onClick={() => {}}
+          onClick={() => likeMark(mark.txId)}
         >
           <ThumbsUp />
+          <span>{likes.length}</span>
         </Button>
-      )} */}
+      )}
     </Block>
   )
 }

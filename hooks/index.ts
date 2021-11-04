@@ -240,3 +240,39 @@ export const fetchTopTags = async () => {
       return []
     })
 }
+
+export async function fetchLikeByTxId(txId: string) {
+  const query = gql`
+    query {
+      transactions(
+        first: 1000
+        recipients: ["FaZaQ48i0WXQyGXw68xuwuc6acUQoXYr8iLe8W-w234"]
+        tags: [
+          { name: "App-Name", values: ["permamark.vote"] },
+          { name: "markHash", values: ["${txId}"] }
+        ]
+      ) {
+        edges {
+          node {
+            id
+            owner {
+              address
+            }
+            tags {
+              name
+              value
+            }
+          }
+        }
+      }
+    }
+  `
+
+  try {
+    const result = await request('https://arweave.net/graphql', query)
+    const txs = result.transactions.edges.map((t) => t.node)
+    return txs
+  } catch (error) {
+    return []
+  }
+}

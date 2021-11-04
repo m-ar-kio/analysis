@@ -1,28 +1,28 @@
-import React, { useEffect, useState } from "react"
-import { Block } from "baseui/block"
-import Layout from "../components/Layout"
-import Mark from "../components/Mark"
-import { useMyMarkFlow } from "../hooks"
-import Login from "../components/Login"
-import { H1 } from "baseui/typography"
-import { formatMark } from "../utils/format"
-import PacmanLoader from "react-spinners/PacmanLoader"
-import { getClaimableMark } from "../utils/pst"
-import { Button } from "baseui/button"
+import React, { useEffect, useState } from 'react'
+import { Block } from 'baseui/block'
+import Layout from '../components/Layout'
+import Mark from '../components/Mark'
+import { useMyMarkFlow } from '../hooks'
+import Login from '../components/Login'
+import { H1 } from 'baseui/typography'
+import { formatMark } from '../utils/format'
+import PacmanLoader from 'react-spinners/PacmanLoader'
+import { getClaimableMark } from '../utils/pst'
+import { Button } from 'baseui/button'
 
 function Index() {
-  const [address, setAddress] = useState("")
+  const [address, setAddress] = useState('')
   const [page, setPage] = React.useState(1)
   const [claimable, setClaimable] = useState(0)
   const { isLoading, marks } = useMyMarkFlow(address, page)
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const address = localStorage.getItem("address")
+    if (typeof window !== 'undefined') {
+      const address = sessionStorage.getItem('address')
       setAddress(address)
 
       if (address) {
-        getClaimableMark(address).then(value => setClaimable(value))
+        getClaimableMark(address).then((value) => setClaimable(value))
       }
     }
   }, [])
@@ -43,7 +43,7 @@ function Index() {
           </div>
         )}
         {address &&
-          marks.map(m => {
+          marks.map((m) => {
             return <Mark key={m.id} mark={formatMark(m)} />
           })}
 

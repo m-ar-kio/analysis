@@ -19,6 +19,7 @@ import Link from 'next/link'
 import 'arconnect'
 import { ellipsis } from '../../utils/format'
 import { Paragraph3 } from 'baseui/typography'
+import { connectAR } from '../../utils/wallet'
 
 export default function Layout({
   title,
@@ -39,7 +40,7 @@ export default function Layout({
       setEngine(_engine)
     })
     if (typeof window !== 'undefined') {
-      const address = localStorage.getItem('address')
+      const address = sessionStorage.getItem('address')
       if (address) {
         setAddress(address)
       } else {
@@ -48,15 +49,17 @@ export default function Layout({
             .getActiveAddress()
             .then((address) => {
               if (address) {
-                localStorage.setItem('address', address)
+                sessionStorage.setItem('address', address)
                 window.location.reload()
               }
             })
-            .catch(() => {})
+            .catch(() => {
+              console.log('###error')
+            })
         }
       }
       window.addEventListener('walletSwitch', (e) => {
-        localStorage.setItem('address', e.detail.address)
+        sessionStorage.setItem('address', e.detail.address)
       })
     }
   }, [address])

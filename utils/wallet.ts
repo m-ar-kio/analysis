@@ -86,6 +86,7 @@ export const likeMark = async (hash) => {
         {
           target: MARK_OWNER,
           data: 'I like this mark',
+          quantity: arweave.ar.arToWinston('0'),
         },
         wallet
       )
@@ -94,20 +95,9 @@ export const likeMark = async (hash) => {
       tx.addTag('Unix-Time', String(Math.round(new Date().getTime() / 1000)))
       tx.addTag('markHash', hash)
       await arweave.transactions.sign(tx, wallet)
-      const isValid = await arweave.transactions.verify(tx)
-      console.log('###isValid', isValid)
       await arweave.transactions.post(tx)
-      arweave.transactions.getStatus(tx.last_tx).then((res) => {
-        if (res.status === 200) {
-          toaster.positive('Mark liked', {
-            autoHideDuration: TOAST_DURATION,
-          })
-        } else {
-          toaster.negative('Error: transaction not sent', {
-            autoHideDuration: TOAST_DURATION,
-          })
-        }
-        console.log(tx, res)
+      toaster.positive('Mark liked', {
+        autoHideDuration: TOAST_DURATION,
       })
       // } else if (window.arweaveWallet) {
       //   const tx = await arweave.createTransaction({

@@ -36,8 +36,11 @@ export default function Mark({ mark, isInModal, isPublic }: Props) {
   const _isMirror = isMirror(parsedURL.hostname)
   let content = null
   const [likes, setLikes] = React.useState([])
+  const [address, setAddress] = React.useState('')
 
   React.useEffect(() => {
+    const address = sessionStorage.getItem('address')
+    setAddress(address)
     if (mark) {
       fetchLikeByTxId(mark.txId)
         .then((_liked) => {
@@ -70,6 +73,9 @@ export default function Mark({ mark, isInModal, isPublic }: Props) {
   }
 
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator?.userAgent)
+
+  const isVoted = likes.some((like) => like.owner.address === address)
+
   return (
     <Block
       width={isMobile ? 'calc(100% - 30px)' : '800px'}
@@ -90,7 +96,7 @@ export default function Mark({ mark, isInModal, isPublic }: Props) {
       {content}
       {isPublic && (
         <Button
-          kind="secondary"
+          kind={isVoted ? 'primary' : 'secondary'}
           overrides={{
             BaseButton: {
               style: {
@@ -100,7 +106,7 @@ export default function Mark({ mark, isInModal, isPublic }: Props) {
               },
             },
           }}
-          onClick={() => likeMark(mark.txId)}
+          onClick={() => !isVoted && likeMark(mark.txId)}
         >
           <ThumbsUp />
           <span style={{ marginLeft: 4, fontSize: 20 }}>{likes.length}</span>

@@ -31,7 +31,7 @@ export default function Login() {
           onDrop={loadKeyfile}
         />
 
-        <H1>OR</H1>
+        {/* <H1>OR</H1>
 
         <Button
           size="large"
@@ -45,7 +45,7 @@ export default function Login() {
           onClick={connectAR}
         >
           Connect AR
-        </Button>
+        </Button> */}
       </Block>
     </Block>
   )

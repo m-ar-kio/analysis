@@ -1,23 +1,17 @@
 import React from 'react'
 import Layout from '../components/Layout'
-import Mark from '../components/Mark'
-import { useMarkFlow } from '../hooks'
+import { useMarkFlow, useTrendingMarkFlow } from '../hooks'
 import { Tabs, Tab } from 'baseui/tabs-motion'
-import { formatMark } from '../utils/format'
-import { Button } from 'baseui/button'
 import TopTags from '../components/TopTags'
+import List from '../components/Mark/List'
 
 function Index() {
   const [page, setPage] = React.useState(1)
   const [activeKey, setActiveKey] = React.useState('0')
   const { isLoading, marks } = useMarkFlow(page)
+  const { isLoading: isLoadingTrending, marks: trendingMarks } =
+    useTrendingMarkFlow()
 
-  const placeholderStyle = {
-    marginTop: 20,
-    width: 800,
-    height: 250,
-    background: '#e3e3e3',
-  }
   return (
     <Layout title="m-ar-k">
       <div
@@ -37,27 +31,16 @@ function Index() {
             activeKey={activeKey}
           >
             <Tab title="Last">
-              {isLoading && (
-                <div>
-                  <div style={placeholderStyle} />
-                  <div style={placeholderStyle} />
-                  <div style={placeholderStyle} />
-                  <div style={placeholderStyle} />
-                </div>
-              )}
-              {marks.map((m) => {
-                return <Mark key={m.id} mark={formatMark(m)} isPublic />
-              })}
-              {!!marks.length && (
-                <Button
-                  isLoading={isLoading}
-                  onClick={() => !isLoading && setPage(page + 1)}
-                >
-                  LOAD MORE
-                </Button>
-              )}
+              <List
+                page={page}
+                setPage={setPage}
+                isLoading={isLoading}
+                marks={marks}
+              />
             </Tab>
-            <Tab title="Trending">Coming soon</Tab>
+            <Tab title="Trending">
+              <List isLoading={isLoadingTrending} marks={trendingMarks} />
+            </Tab>
           </Tabs>
         </div>
         <TopTags />

@@ -30,7 +30,7 @@ function About() {
         <p style={pstyle}>Happy marking!</p>
 
         <h1>Our Roadmap</h1>
-        <ProgressSteps current={4}>
+        <ProgressSteps current={5}>
           <Step title="Offcial website launched"></Step>
           <Step title="Extension published, PSTs"></Step>
           <Step title="Feature: sort by tags, markers"></Step>

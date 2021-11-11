@@ -54,3 +54,23 @@ export function parseTags(tagsArray) {
   const sorted = keys.sort((a, b) => dict[b] - dict[a]).slice(0, 10)
   return sorted
 }
+
+export function parseVotes(tagsArray) {
+  const dict = {}
+  tagsArray.forEach((tags) => {
+    if (tags.length > 3) {
+      const tag = tags.find((tag) => tag.name === 'markHash')
+      if (tag) {
+        if (dict[tag.value]) {
+          dict[tag.value] += 1
+        } else {
+          dict[tag.value] = 1
+        }
+      }
+    }
+  })
+
+  const keys = Object.keys(dict)
+  const sorted = keys.sort((a, b) => dict[b] - dict[a]).slice(0, 10)
+  return sorted
+}

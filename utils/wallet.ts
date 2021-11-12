@@ -40,6 +40,11 @@ export const loadKeyfile = (files) => {
 }
 
 export const connectAR = () => {
+  if (!window.arweaveWallet) {
+    return toaster.negative('Error: Not connected to Arweave', {
+      autoHideDuration: TOAST_DURATION,
+    })
+  }
   window.arweaveWallet
     .connect(['ACCESS_ADDRESS', 'ACCESS_ALL_ADDRESSES', 'SIGN_TRANSACTION'])
     .then((value) => {
@@ -80,39 +85,29 @@ export const likeMark = async (hash) => {
 
     const keyfile = sessionStorage.getItem('keyfile')
 
+    const tx = await arweave.createTransaction({
+      target: MARK_OWNER,
+      data: 'I like this mark',
+      quantity: arweave.ar.arToWinston('0'),
+    })
+    tx.addTag('App-Name', 'permamark.vote')
+    tx.addTag('App-Version', '0.0.1')
+    tx.addTag('Unix-Time', String(Math.round(new Date().getTime() / 1000)))
+    tx.addTag('markHash', hash)
+
     if (keyfile) {
       const wallet = JSON.parse(keyfile)
-      const tx = await arweave.createTransaction(
-        {
-          target: MARK_OWNER,
-          data: 'I like this mark',
-          quantity: arweave.ar.arToWinston('0'),
-        },
-        wallet
-      )
-      tx.addTag('App-Name', 'permamark.vote')
-      tx.addTag('App-Version', '0.0.1')
-      tx.addTag('Unix-Time', String(Math.round(new Date().getTime() / 1000)))
-      tx.addTag('markHash', hash)
       await arweave.transactions.sign(tx, wallet)
       await arweave.transactions.post(tx)
       toaster.positive('Mark liked', {
         autoHideDuration: TOAST_DURATION,
       })
-      // } else if (window.arweaveWallet) {
-      //   const tx = await arweave.createTransaction({
-      //     target: MARK_OWNER,
-      //     data: '',
-      //     quantity: arweave.ar.arToWinston('0'),
-      //   })
-      //   tx.addTag('App-Name', 'permamark/vote')
-      //   tx.addTag('liker', address)
-      //   tx.addTag('mark', hash)
-      //   const signedTx = await window.arweaveWallet.sign(tx)
-      //   await arweave.transactions.post(signedTx)
-      //   toaster.positive('Liked, thank you', {
-      //     autoHideDuration: TOAST_DURATION,
-      //   })
+    } else if (window.arweaveWallet) {
+      const signedTx = await window.arweaveWallet.sign(tx)
+      await arweave.transactions.post(signedTx)
+      toaster.positive('Liked, thank you', {
+        autoHideDuration: TOAST_DURATION,
+      })
     }
   })
 }

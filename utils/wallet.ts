@@ -1,5 +1,5 @@
 import { toaster } from 'baseui/toast'
-import { MARK_OWNER, TOAST_DURATION } from './constants'
+import { EXTENSION_ID, MARK_OWNER, TOAST_DURATION } from './constants'
 
 export const loadKeyfile = (files) => {
   if (files[0].name.split('.').pop().toLowerCase() === 'json') {
@@ -70,44 +70,45 @@ export const connectAR = () => {
 }
 
 export const likeMark = async (hash) => {
-  const address = sessionStorage.getItem('address')
-  if (!address) {
-    return toaster.negative('Please login first', {
-      autoHideDuration: TOAST_DURATION,
-    })
-  }
-  import('arweave/web').then(async (Arweave) => {
-    const arweave = Arweave.default.init({
-      host: 'arweave.net',
-      port: 443,
-      protocol: 'https',
-    })
+  chrome.runtime.sendMessage(
+    EXTENSION_ID,
+    { method: 'get-keyfile' },
+    async (response) => {
+      if (response.keyfile) {
+        import('arweave/web').then(async (Arweave) => {
+          const arweave = Arweave.default.init({
+            host: 'arweave.net',
+            port: 443,
+            protocol: 'https',
+          })
 
-    const keyfile = sessionStorage.getItem('keyfile')
+          const keyfile = response.keyfile
 
-    const tx = await arweave.createTransaction({
-      target: MARK_OWNER,
-      data: 'I like this mark',
-      quantity: arweave.ar.arToWinston('0'),
-    })
-    tx.addTag('App-Name', 'permamark.vote')
-    tx.addTag('App-Version', '0.0.1')
-    tx.addTag('Unix-Time', String(Math.round(new Date().getTime() / 1000)))
-    tx.addTag('markHash', hash)
+          const tx = await arweave.createTransaction({
+            target: MARK_OWNER,
+            data: 'I like this mark',
+            quantity: arweave.ar.arToWinston('0'),
+          })
+          tx.addTag('App-Name', 'permamark.vote')
+          tx.addTag('App-Version', '0.0.1')
+          tx.addTag(
+            'Unix-Time',
+            String(Math.round(new Date().getTime() / 1000))
+          )
+          tx.addTag('markHash', hash)
 
-    if (keyfile) {
-      const wallet = JSON.parse(keyfile)
-      await arweave.transactions.sign(tx, wallet)
-      await arweave.transactions.post(tx)
-      toaster.positive('Mark liked', {
-        autoHideDuration: TOAST_DURATION,
-      })
-    } else if (window.arweaveWallet) {
-      const signedTx = await window.arweaveWallet.sign(tx)
-      await arweave.transactions.post(signedTx)
-      toaster.positive('Liked, thank you', {
-        autoHideDuration: TOAST_DURATION,
-      })
+          const wallet = JSON.parse(keyfile)
+          await arweave.transactions.sign(tx, wallet)
+          await arweave.transactions.post(tx)
+          toaster.positive('Mark liked', {
+            autoHideDuration: TOAST_DURATION,
+          })
+        })
+      } else {
+        toaster.negative('Please download extension first', {
+          autoHideDuration: TOAST_DURATION,
+        })
+      }
     }
-  })
+  )
 }

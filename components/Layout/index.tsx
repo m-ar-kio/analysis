@@ -20,6 +20,9 @@ import 'arconnect'
 import { ellipsis } from '../../utils/format'
 import { Paragraph3 } from 'baseui/typography'
 import { connectAR } from '../../utils/wallet'
+import { Chrome } from 'react-feather'
+import { useAddress } from '../../hooks'
+import { EXTENSION_DOWNLOAD_URL } from '../../utils/constants'
 
 export default function Layout({
   title,
@@ -28,7 +31,7 @@ export default function Layout({
   title: string
   children?: any
 }) {
-  const [address, setAddress] = useState('')
+  const address = useAddress()
   const [engine, setEngine] = useState(null)
 
   useEffect(() => {
@@ -39,30 +42,7 @@ export default function Layout({
           : new styletron.Server()
       setEngine(_engine)
     })
-    if (typeof window !== 'undefined') {
-      const address = sessionStorage.getItem('address')
-      if (address) {
-        setAddress(address)
-      } else {
-        if (window.arweaveWallet) {
-          window.arweaveWallet
-            .getActiveAddress()
-            .then((address) => {
-              if (address) {
-                sessionStorage.setItem('address', address)
-                window.location.reload()
-              }
-            })
-            .catch(() => {
-              console.log('###error')
-            })
-        }
-      }
-      window.addEventListener('walletSwitch', (e) => {
-        sessionStorage.setItem('address', e.detail.address)
-      })
-    }
-  }, [address])
+  }, [])
 
   if (!engine) return null
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator?.userAgent)
@@ -109,7 +89,7 @@ export default function Layout({
                     alignItems: 'center',
                     flexFlow: 'row nowrap',
                   }}
-                  href="https://chrome.google.com/webstore/detail/m-ar-k/bbjiedgkloappmaaolkcfalkkjomhoad"
+                  href={EXTENSION_DOWNLOAD_URL}
                 >
                   Download
                 </StyledLink>

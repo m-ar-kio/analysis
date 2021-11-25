@@ -1,14 +1,8 @@
 import * as React from 'react'
-import { FileUploader } from 'baseui/file-uploader'
 import { Block } from 'baseui/block'
-import { H1 } from 'baseui/typography'
-import { Button } from 'baseui/button'
-import { toaster } from 'baseui/toast'
-import { TOAST_DURATION } from '../../utils/constants'
-import { connectAR, loadKeyfile } from '../../utils/wallet'
+import { EXTENSION_DOWNLOAD_URL } from '../../utils/constants'
 
 export default function Login() {
-  const [errorMessage, setErrorMessage] = React.useState('')
   return (
     <Block
       width="100vw"
@@ -25,27 +19,18 @@ export default function Login() {
         alignItems="center"
         justifyContent="center"
       >
-        <FileUploader
-          accept=".json"
-          errorMessage={errorMessage}
-          onDrop={loadKeyfile}
-        />
-
-        <H1>OR</H1>
-
-        <Button
-          size="large"
-          overrides={{
-            BaseButton: {
-              style: ({ $theme }) => ({
-                padding: '15px 75px',
-              }),
-            },
-          }}
-          onClick={connectAR}
-        >
-          Connect AR
-        </Button>
+        <p style={{ fontSize: 28 }}>
+          Please{' '}
+          <a
+            href={EXTENSION_DOWNLOAD_URL}
+            target="_blank"
+            rel="noreferrer"
+            style={{ fontWeight: 'bold' }}
+          >
+            download
+          </a>{' '}
+          extension here
+        </p>
       </Block>
     </Block>
   )

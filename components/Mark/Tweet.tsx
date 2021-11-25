@@ -1,9 +1,9 @@
-import * as React from "react"
-import { Block } from "baseui/block"
-import MarkInModal from "./InModal"
-import Footer from "./Footer"
-import { isMirror, isTwitter } from "./helper"
-import Tags from "./Tags"
+import * as React from 'react'
+import { Block } from 'baseui/block'
+import MarkInModal from './InModal'
+import Footer from './Footer'
+import { isMirror, isTwitter } from './helper'
+import Tags from './Tags'
 
 export default function Tweet({
   tree,
@@ -22,8 +22,8 @@ export default function Tweet({
   }
   return (
     <Block
-      className={`mark tweet ${isInModal ? "in-modal" : ""} ${
-        _isMirror ? "mirror" : ""
+      className={`mark tweet ${isInModal ? 'in-modal' : ''} ${
+        _isMirror ? 'mirror' : ''
       }`}
       onClick={() => !isInModal && setViewMode(true)}
     >
@@ -34,7 +34,7 @@ export default function Tweet({
         alignItems="center"
       >
         {reactOutput(_tree[0])}
-        {_isTwitter ? reactOutput(_tree[1]) : ""}
+        {_isTwitter ? reactOutput(_tree[1]) : ''}
       </Block>
       <Block className="content">
         {reactOutput(_tree.slice(_isTwitter ? 2 : 1))}
@@ -55,7 +55,7 @@ function formatTwitterTree(tree) {
       const content = tree[index].content[0]
       if (
         content &&
-        content.type === "link" &&
+        content.type === 'link' &&
         !content.title &&
         !content.content.length
       ) {

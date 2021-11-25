@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { request, gql } from 'graphql-request'
 import axios from 'axios'
+import { EXTENSION_ID } from '../utils/constants'
 
 const formatTX = (ids, arweave) => {
   return Promise.all(
@@ -15,6 +16,35 @@ const formatTX = (ids, arweave) => {
       })
     })
   )
+}
+
+export const useAddress = () => {
+  const [address, setAddress] = useState('')
+
+  useEffect(() => {
+    chrome.runtime.sendMessage(
+      EXTENSION_ID,
+      { method: 'get-keyfile' },
+      async (response) => {
+        if (response.keyfile) {
+          import('arweave/web').then((Arweave: any) => {
+            const arweave = Arweave.default.init({
+              host: 'arweave.net',
+              port: 443,
+              protocol: 'https',
+            })
+            arweave.wallets
+              .jwkToAddress(JSON.parse(response.keyfile))
+              .then((address) => {
+                setAddress(address)
+              })
+              .catch(console.log)
+          })
+        }
+      }
+    )
+  }, [])
+  return address
 }
 
 export const useMarkFlow = (page = 1, tag = '') => {

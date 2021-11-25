@@ -19,8 +19,6 @@ import Link from 'next/link'
 import 'arconnect'
 import { ellipsis } from '../../utils/format'
 import { Paragraph3 } from 'baseui/typography'
-import { connectAR } from '../../utils/wallet'
-import { Chrome } from 'react-feather'
 import { useAddress } from '../../hooks'
 import { EXTENSION_DOWNLOAD_URL } from '../../utils/constants'
 

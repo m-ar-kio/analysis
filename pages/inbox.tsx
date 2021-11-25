@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Block } from 'baseui/block'
 import Layout from '../components/Layout'
 import Mark from '../components/Mark'
-import { useMyMarkFlow } from '../hooks'
+import { useAddress, useMyMarkFlow } from '../hooks'
 import Login from '../components/Login'
 import { H1 } from 'baseui/typography'
 import { formatMark } from '../utils/format'
@@ -11,21 +11,18 @@ import { getClaimableMark } from '../utils/pst'
 import { Button } from 'baseui/button'
 
 function Index() {
-  const [address, setAddress] = useState('')
+  const address = useAddress()
   const [page, setPage] = React.useState(1)
   const [claimable, setClaimable] = useState(0)
   const { isLoading, marks } = useMyMarkFlow(address, page)
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const address = sessionStorage.getItem('address')
-      setAddress(address)
-
       if (address) {
         getClaimableMark(address).then((value) => setClaimable(value))
       }
     }
-  }, [])
+  }, [address])
 
   return (
     <Layout title="m-ar-k | Inbox">

@@ -28,7 +28,7 @@ export function initTwitterRules(bookmark) {
           src: prefixLink(node.target, bookmark.origin),
           alt: node.alt,
           title: node.title,
-          width: src.includes('/hashflags/') ? 18 : undefined,
+          width: src?.includes('/hashflags/') ? 18 : undefined,
         })
       },
     },

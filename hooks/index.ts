@@ -22,7 +22,7 @@ export const useAddress = () => {
   const [address, setAddress] = useState('')
 
   useEffect(() => {
-    chrome.runtime.sendMessage(
+    chrome.runtime?.sendMessage(
       EXTENSION_ID,
       { method: 'get-keyfile' },
       async (response) => {
